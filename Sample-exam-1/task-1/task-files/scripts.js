@@ -42,30 +42,29 @@ function createCalendar(element, events) {
             } else {
                 if (colCount < 0) {
                     html += '<td class="events-container">';
-                    if (events[eventlen].date === currentDate.getDay()) {
+                   /* if (events[eventlen].date === currentDate.getDay()) { //BUG here!
                         html += events[eventlen].title;
                         html += events[eventlen].hour;
                         html += events[eventlen].duration;
-                    }
+                    }*/
                     html += '</td>';
 
                 } else {
                     while (colCount) {
                         html += '<td class="events-container">';
-                        if (events[eventlen].date === currentDate.getDay()) {
+                        /*if (events[eventlen].date === currentDate.getDay()) { //BUG here!
                             html += events[eventlen].title;
                             html += events[eventlen].hour;
                             html += events[eventlen].duration;
-                        }
+                        }*/
                         html += '</td>';
                         colCount -= 1;
                     }
                 }
-                while (eventlen > 0) {
-                    eventlen -= 1;
-                }
+                // while (eventlen > 0) { //BUG here
+                //     eventlen -= 1;
+                // }
             }
-
         }
     }
 
