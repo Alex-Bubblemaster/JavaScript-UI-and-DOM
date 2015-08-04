@@ -26,15 +26,26 @@ function createCalendar(element, events) {
     };
 
     var colCount = -1,
-        eventlen = events.length;
-    //console.log(events[eventlen - 1].date);
-    //console.log(eventCount);
+        eventlen = events.length - 1;
+
+    function hasEventToAdd() {
+        return events.some(function (event, index, events) {
+            return events[index].date === currentDate.getDay();
+        });
+    }
+
+    function addEvent(dateId){ //need to execute this function after the elements have been added to DOM
+        var checkDate = document.getElementById(dateId);
+
+        //return
+    }
     for (rows = 0; rows < rowsLen; rows += 1) {
         html += '<tr></tr>';
         for (cols = 0; cols < colsLen; cols += 1) {
             if (!(rows % 2)) {
-                html += '<td class="date-container">' + (currentDate).toDateString() + '</td>';
+                html += '<td class="date-container" id="' + currentDate.getDay() + '">"' + (currentDate).toDateString() + '</td>';
                 currentDate = currentDate.addDays(1);
+
                 if (currentDate.getMonth() > 7) {
                     colCount = cols + 1; //when this breaks need to know how many more cells to print on the bottom row
                     break;
@@ -42,27 +53,28 @@ function createCalendar(element, events) {
             } else {
                 if (colCount < 0) {
                     html += '<td class="events-container">';
-                    if (events[eventlen].date === currentDate.getDay()) {
+                    if (hasEventToAdd) {
                         html += events[eventlen].title;
                         html += events[eventlen].hour;
-                        html += events[eventlen].duration;
+                        html += ' Duration - ' + events[eventlen].duration + 'mins';
                     }
                     html += '</td>';
 
                 } else {
                     while (colCount) {
                         html += '<td class="events-container">';
-                        if (events[eventlen].date === currentDate.getDay()) {
+                        if (hasEventToAdd) {
                             html += events[eventlen].title;
                             html += events[eventlen].hour;
-                            html += events[eventlen].duration;
+                            html += ' Duration - ' + events[eventlen].duration + 'mins';
                         }
                         html += '</td>';
                         colCount -= 1;
                     }
                 }
-                while (eventlen > 0) {
-                    eventlen -= 1;
+                eventlen -= 1;
+                if (eventlen < 0) {
+                    eventlen = events.length - 1;
                 }
             }
 
