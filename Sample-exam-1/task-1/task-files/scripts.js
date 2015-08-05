@@ -40,10 +40,10 @@ function createCalendar(element, events) {
         //return
     }
     for (rows = 0; rows < rowsLen; rows += 1) {
-        html += '<tr></tr>';
+        html += '<tr>';
         for (cols = 0; cols < colsLen; cols += 1) {
             if (!(rows % 2)) {
-                html += '<td class="date-container" id="' + currentDate.getDay() + '">"' + (currentDate).toDateString() + '</td>';
+                html += '<td class="date-container ' + cols + '">' + (currentDate).toDateString() + '</td>';
                 currentDate = currentDate.addDays(1);
 
                 if (currentDate.getMonth() > 7) {
@@ -52,23 +52,11 @@ function createCalendar(element, events) {
                 }
             } else {
                 if (colCount < 0) {
-                    html += '<td class="events-container">';
-                    if (hasEventToAdd) {
-                        html += events[eventlen].title;
-                        html += events[eventlen].hour;
-                        html += ' Duration - ' + events[eventlen].duration + 'mins';
-                    }
-                    html += '</td>';
+                    html += '<td class="events-container ' + cols + '"></td>';
 
                 } else {
                     while (colCount) {
-                        html += '<td class="events-container">';
-                        if (hasEventToAdd) {
-                            html += events[eventlen].title;
-                            html += events[eventlen].hour;
-                            html += ' Duration - ' + events[eventlen].duration + 'mins';
-                        }
-                        html += '</td>';
+                        html += '<td class="events-container ' + cols + '"></td>';
                         colCount -= 1;
                     }
                 }
@@ -77,8 +65,8 @@ function createCalendar(element, events) {
                     eventlen = events.length - 1;
                 }
             }
-
         }
+        html+='</tr>';
     }
 
     table.innerHTML += html;
