@@ -11,6 +11,18 @@ var events = [{
 }];
 
 function createCalendar(element, events) {
+
+    function hasEventToAdd(eventId) {
+        return events.filter(function (event, index,events) {
+            return event.date === eventId;
+        });
+    }
+
+    function addEvent(dateId) { //need to execute this function after the elements have been added to DOM
+        var checkDate = document.getElementById(dateId);
+
+        //return
+    }
     var container = document.getElementById(element),
         table = document.createElement('table'),
         rows,
@@ -18,32 +30,20 @@ function createCalendar(element, events) {
         rowsLen = 10,
         colsLen = 7,
         html = '',
-        currentDate = new Date(2015, 7, 1);
+        currentDate = new Date(2015, 7, 1),
+        colCount = -1,
+        eventId =  1;
 
     Date.prototype.addDays = function (days) {
-        this.setDate(this.getDate() + parseInt(days));
+        this.setDate(this.getDate() + parseFloat(days));
         return this;
     };
 
-    var colCount = -1,
-        eventlen = events.length - 1;
-
-    function hasEventToAdd() {
-        return events.some(function (event, index, events) {
-            return events[index].date === currentDate.getDay();
-        });
-    }
-
-    function addEvent(dateId){ //need to execute this function after the elements have been added to DOM
-        var checkDate = document.getElementById(dateId);
-
-        //return
-    }
     for (rows = 0; rows < rowsLen; rows += 1) {
         html += '<tr>';
         for (cols = 0; cols < colsLen; cols += 1) {
             if (!(rows % 2)) {
-                html += '<td class="date-container ' + cols + '">' + (currentDate).toDateString() + '</td>';
+                html += '<td class="date-container">' + (currentDate).toDateString() + '</td>';
                 currentDate = currentDate.addDays(1);
 
                 if (currentDate.getMonth() > 7) {
@@ -51,22 +51,30 @@ function createCalendar(element, events) {
                     break;
                 }
             } else {
+                var event = hasEventToAdd(eventId);
+                     console.log(event);
                 if (colCount < 0) {
-                    html += '<td class="events-container ' + cols + '"></td>';
-
+                    html += '<td class="events-container">' +
+                        '<span id="' + eventId + '">';
+                        if(event){
+                            html+= event.title + event.hour + event.duration;
+                        }
+                    html+='</span></td>';
                 } else {
                     while (colCount) {
-                        html += '<td class="events-container ' + cols + '"></td>';
+                        html += '<td class="events-container">' +
+                            '<span id="' + eventId + '">';
+                        if(event){
+                            html+= event.title + event.hour + event.duration;
+                        }
+                        html+='</span></td>';
                         colCount -= 1;
                     }
                 }
-                eventlen -= 1;
-                if (eventlen < 0) {
-                    eventlen = events.length - 1;
-                }
+                eventId +=1;
             }
         }
-        html+='</tr>';
+        html += '</tr>';
     }
 
     table.innerHTML += html;
@@ -74,6 +82,8 @@ function createCalendar(element, events) {
 
     var datesCells = document.getElementsByClassName('date-container'),
         eventsCells = document.getElementsByClassName('events-container');
+
+
 
     [].forEach.call(datesCells, function (dateCell) { //need to use call for array methods with HTML Collections
         dateCell.style.textAlign = 'center';
