@@ -11,18 +11,20 @@ var events = [{
 }];
 
 function createCalendar(element, events) {
+    Date.prototype.addDays = function (days) {
+        this.setDate(this.getDate() + parseInt(days));
+        return this;
+    };
 
     function hasEventToAdd(eventId) {
-        return events.filter(function (event, index,events) {
-            return event.date === eventId;
-        });
+        for (var i = 0; i < events.length; i += 1) {
+            if(+events[i].date === eventId){
+                return i;
+            }
+        }
+        return -1;
     }
 
-    function addEvent(dateId) { //need to execute this function after the elements have been added to DOM
-        var checkDate = document.getElementById(dateId);
-
-        //return
-    }
     var container = document.getElementById(element),
         table = document.createElement('table'),
         rows,
@@ -33,11 +35,6 @@ function createCalendar(element, events) {
         currentDate = new Date(2015, 7, 1),
         colCount = -1,
         eventId =  1;
-
-    Date.prototype.addDays = function (days) {
-        this.setDate(this.getDate() + parseFloat(days));
-        return this;
-    };
 
     for (rows = 0; rows < rowsLen; rows += 1) {
         html += '<tr>';
@@ -52,20 +49,19 @@ function createCalendar(element, events) {
                 }
             } else {
                 var event = hasEventToAdd(eventId);
-                     console.log(event);
                 if (colCount < 0) {
                     html += '<td class="events-container">' +
                         '<span id="' + eventId + '">';
-                        if(event){
-                            html+= event.title + event.hour + event.duration;
+                        if(event !== -1){
+                            html+= events[event].title + ' ' +  events[event].hour + ' ' + events[event].duration;
                         }
                     html+='</span></td>';
                 } else {
                     while (colCount) {
                         html += '<td class="events-container">' +
                             '<span id="' + eventId + '">';
-                        if(event){
-                            html+= event.title + event.hour + event.duration;
+                        if(event > -1){
+                            html+= events[event].title + ' ' +  events[event].hour + ' ' + events[event].duration;
                         }
                         html+='</span></td>';
                         colCount -= 1;
@@ -82,8 +78,6 @@ function createCalendar(element, events) {
 
     var datesCells = document.getElementsByClassName('date-container'),
         eventsCells = document.getElementsByClassName('events-container');
-
-
 
     [].forEach.call(datesCells, function (dateCell) { //need to use call for array methods with HTML Collections
         dateCell.style.textAlign = 'center';
