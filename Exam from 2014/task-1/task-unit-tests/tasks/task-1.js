@@ -5,8 +5,7 @@ function solve() {
             leftDiv = document.createElement('div'),
             rightDiv = document.createElement('div'),
             bigImage = document.createElement('img'),
-            bigTitle = document.createElement('h1'),
-            input = document.createElement('input');
+            bigTitle = document.createElement('h1');
 
         //left div image preview
         leftDiv.className += ' image-preview';
@@ -23,31 +22,43 @@ function solve() {
         leftDiv.appendChild(bigTitle); //without the h1 did not pass the test!
         leftDiv.appendChild(bigImage);
 
-
-
         // right div
 
         rightDiv.style.display = 'inline-block';
         rightDiv.style.textAlign = 'center';
         rightDiv.style.width = '250px';
         rightDiv.style.height = '450px';
-        rightDiv.style.overflow = 'scroll';
 
-
-
-        rightDiv.appendChild(input);
         //generate objects
-        var html = '';
+        var html = '<div id="aside">';
         for (var i = 0, itemsLen = items.length; i < itemsLen; i += 1) {
             html += '<div class="image-container">';
             html += '<h1>' + items[i].title + '</h1>';
             html += '<img src="' + items[i].url + '" width="190">';
             html += '</div>';
         }
-        rightDiv.innerHTML += html;
+        html+='</div>';
+        rightDiv.innerHTML += '<input id="input"/>' + html;
 
         container.appendChild(leftDiv);
         container.appendChild(rightDiv);
+
+        var input = document.getElementById('input');
+        /*input.addEventListener('keyup', function (ev) { //doesn't work need to review
+            var text = ev.target.value;
+            for (var i = 0,len = titles.length; i < len; i += 1) {
+                if(imageDivs[i].innerHTML.toLowerCase().indexOf(text.innerHtml.toLowerCase()) >=0){
+                    imageDivs[i].style.display = 'block';
+                    imageDivs[i].parentElement.style.display = 'block';
+
+                } else {
+                    titles[i].style.display = 'none';
+                    titles[i].parentElement.style.display = 'none';
+                }
+
+            }
+
+        });*/
 
         var titles = document.getElementsByTagName('h1');
         [].forEach.call(titles, function (title) {
@@ -60,8 +71,31 @@ function solve() {
             imageDiv.style.textAlign = 'center';
         });
 
-        var inputField = document.getElementsByTagName('input');
-        inputField.style.position = 'absolute';
+        var asideDiv = document.getElementById('aside');
+        asideDiv.style.overflow = 'scroll';
+        asideDiv.style.height = '450px';
+
+        asideDiv.addEventListener('click', function (ev) {
+            var target = ev.target;
+            if(target.tagName === 'IMG'){
+                bigImage.src = target.src;
+                bigTitle.innerHTML = target.previousElementSibling.innerText;
+            }
+        },false);
+        
+        asideDiv.addEventListener('mouseover', function (ev) {
+            var target = ev.target;
+            if(target.tagName === 'IMG' || target.tagName === 'DIV'){
+                target.parentElement.style.backgroundColor = '#d3d3d3';
+            }
+        },false);
+
+        asideDiv.addEventListener('mouseout', function (ev) {
+            var target = ev.target;
+            if(target.tagName === 'IMG'){
+                target.parentElement.style.backgroundColor = 'white';
+            }
+        },false);
 
     };
 }
