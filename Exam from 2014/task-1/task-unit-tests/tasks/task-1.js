@@ -23,7 +23,6 @@ function solve() {
         leftDiv.appendChild(bigImage);
 
         // right div
-
         rightDiv.style.display = 'inline-block';
         rightDiv.style.textAlign = 'center';
         rightDiv.style.width = '250px';
@@ -43,22 +42,7 @@ function solve() {
         container.appendChild(leftDiv);
         container.appendChild(rightDiv);
 
-        var input = document.getElementById('input');
-        /*input.addEventListener('keyup', function (ev) { //doesn't work need to review
-            var text = ev.target.value;
-            for (var i = 0,len = titles.length; i < len; i += 1) {
-                if(imageDivs[i].innerHTML.toLowerCase().indexOf(text.innerHtml.toLowerCase()) >=0){
-                    imageDivs[i].style.display = 'block';
-                    imageDivs[i].parentElement.style.display = 'block';
 
-                } else {
-                    titles[i].style.display = 'none';
-                    titles[i].parentElement.style.display = 'none';
-                }
-
-            }
-
-        });*/
 
         var titles = document.getElementsByTagName('h1');
         [].forEach.call(titles, function (title) {
@@ -96,7 +80,21 @@ function solve() {
                 target.parentElement.style.backgroundColor = 'white';
             }
         },false);
+        
+        var input = document.getElementById('input');
+        input.addEventListener('input', function () { //does not work as expected
+            var text = this.value;
+            for (var i = 0,len = imageDivs.length; i < len; i += 1) {
+                if((titles[i].innerHTML.toLowerCase()).indexOf(text.toLowerCase()) < 0){
+                    imageDivs[i].style.display = 'none';
+                    titles[i].style.display = 'none';
 
+                } else {
+                    imageDivs[i].style.display = 'block';
+                    titles[i].style.display = 'block';
+                }
+            }
+        });
     };
 }
 
