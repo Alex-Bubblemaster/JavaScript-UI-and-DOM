@@ -42,8 +42,6 @@ function solve() {
         container.appendChild(leftDiv);
         container.appendChild(rightDiv);
 
-
-
         var titles = document.getElementsByTagName('h1');
         [].forEach.call(titles, function (title) {
             title.style.textAlign = 'center';
